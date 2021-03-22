@@ -11,9 +11,15 @@ app.get('/', (req, res) => {
     axios.get(url)
     .then(response => {
         const $ = cheerio.load(response.data);
-        const data = $('.StoryBodyCompanionColumn').text()
+        const dataContainer = [];
+        $('.StoryBodyCompanionColumn').each(function(i, elm) {
+            dataContainer.push($(this).html());
+        })
+        let data = ""
+        for (let i = 0; i < dataContainer.length; i++) {
+            data += dataContainer[i]
+        }
         res.send(data);
-
     });
     
 })
