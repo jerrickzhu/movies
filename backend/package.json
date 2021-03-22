@@ -4,8 +4,11 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
+    "axios": "^0.21.1",
+    "cheerio": "^1.0.0-rc.5",
     "express": "^4.17.1",
-    "node": "^15.10.0"
+    "node": "^15.10.0",
+    "request": "^2.88.2"
   },
   "devDependencies": {},
   "scripts": {
