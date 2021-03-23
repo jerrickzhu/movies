@@ -3,8 +3,11 @@ const cheerio = require("cheerio");
 const axios = require("axios");
 const app = express();
 const port = 4000;
+const search = require("./routes/search");
+const cors = require("cors");
 
-app.set('view engine');
+app.use(cors({origin: 'http://localhost:3000'}));
+app.use('/search', search);
 
 app.get('/', (req, res) => {
     const url = "https://www.nytimes.com/2016/06/10/movies/the-conjuring-2-review.html";
@@ -19,7 +22,7 @@ app.get('/', (req, res) => {
         for (let i = 0; i < dataContainer.length; i++) {
             data += dataContainer[i]
         }
-        res.send(data);
+        res.send({text: data});
     });
     
 })
