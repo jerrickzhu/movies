@@ -11,10 +11,14 @@ export default class Landing extends React.Component {
     }
 
     search(event) {
+        const url = encodeURIComponent(event.target.value);
         axios
-         .post(`http://localhost:4000/search/${event.target.value}`)
+         .get(`http://localhost:4000/search/${url}`)
          .then(response => {
              console.log(response);
+         })
+         .catch(err => {
+             throw err;
          })
        
     }
@@ -36,8 +40,7 @@ export default class Landing extends React.Component {
                     placeholder=''
                     autoFocus="autofocus"
                     onKeyUp={this.handleKeyPress}
-                >
-                </input>
+                />
                 <img src={line} alt="underline"/>
             </div>
         )
