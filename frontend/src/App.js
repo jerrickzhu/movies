@@ -1,14 +1,20 @@
 import './App.css';
-import Test from "./components/Test";
 import Landing from "./components/Landing";
+import Results from "./components/Results";
+import { Route, Switch, withRouter } from 'react-router-dom';
 
 function App() {
   return (
     <div className="App">
-      <Landing />
+
+    <Switch>
+      <Route exact path='/' component={Landing}/>
+      <Route path='/search' component={Results}/>
+    </Switch>
+      
       
     </div>
   );
 }
 
-export default App;
+export default withRouter(App);

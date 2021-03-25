@@ -1,0 +1,27 @@
+const axios = require("axios");
+const MOVIE_DB_API = "bad8318dfb9fcecf3ef3574a242514d3";
+
+const retrieveImage = (req, res, next) => {
+    let resultList = [];
+    let picList = [];
+    const namesOfMovies = req.body.names;
+
+    function getData(index) {
+        return axios.get(`https://api.themoviedb.org/3/search/movie?api_key=${MOVIE_DB_API}&language=en-US&query=${namesOfMovies[index]}`)
+    }
+
+    for (let index = 0; index < namesOfMovies.length; index++) {
+        resultList.push(getData(index));
+    }
+
+
+    Promise.all(resultList).then(results => {
+        for (let index = 0; index < namesOfMovies.length; index++) {
+            picList.push(results[index].data.results[0].poster_path);
+        }
+        res.locals.picList = picList;
+        next();
+    });   
+}
+
+module.exports = retrieveImage;
