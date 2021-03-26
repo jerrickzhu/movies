@@ -5,6 +5,7 @@ const app = express();
 const port = 4000;
 const search = require("./routes/search");
 const retrieveImage = require("./routes/movieimage");
+const criticSays = require("./routes/critics");
 const cors = require("cors");
 const MOVIE_DB_API = "bad8318dfb9fcecf3ef3574a242514d3";
 
@@ -14,22 +15,10 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors({origin: 'http://localhost:3000', credentials: true}));
 app.use('/search', search);
 app.use('/movieimage', retrieveImage);
+app.use('/critic', criticSays);
 
 app.get('/', (req, res) => {
-    const url = "https://www.nytimes.com/2016/06/10/movies/the-conjuring-2-review.html";
-    axios.get(url)
-    .then(response => {
-        const $ = cheerio.load(response.data);
-        const dataContainer = [];
-        $('.StoryBodyCompanionColumn').each(function(i, elm) {
-            dataContainer.push($(this).html());
-        })
-        let data = ""
-        for (let i = 0; i < dataContainer.length; i++) {
-            data += dataContainer[i]
-        }
-        res.send({text: data});
-    });
+    res.send("HELLO")
 })
 
 app.get('/testing', (req, res) => {

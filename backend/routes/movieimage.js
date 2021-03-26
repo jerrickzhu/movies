@@ -5,7 +5,7 @@ const retrieveImage = require("../middleware/retrieveImageTMDB");
 router
 .route('/:movietitle')
 .post(retrieveImage, (req, res) => {
-    res.send(res.locals.picList);
+    res.send(res.locals);
 });
 
 module.exports = router;
