@@ -1,10 +1,10 @@
 const express = require("express");
 let router = express.Router();
-const retrieveImage = require("../middleware/retrieveImageTMDB");
+const middleware = require("../middleware/retrieveImageTMDB");
 
 router
 .route('/:movietitle')
-.post(retrieveImage, (req, res) => {
+.post(middleware.retrievePoster, (req, res) => {
     res.send(res.locals);
 });
 

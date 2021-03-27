@@ -1,7 +1,21 @@
 const axios = require("axios");
 const MOVIE_DB_API = "bad8318dfb9fcecf3ef3574a242514d3";
 
-const retrieveImage = (req, res, next) => {
+const getBackdrop = (req, res, next) => {
+    const movieID = req.body.movieID;
+    axios
+    .get(`https://api.themoviedb.org/3/movie/${movieID}/images?api_key=${MOVIE_DB_API}`)
+    .then(response => {
+        let filepath = response.data.backdrops[0].file_path;
+        res.locals.backdrop = filepath;
+        next();
+    })
+    .catch(err => {
+        throw err;
+    });
+}
+
+const retrievePoster = (req, res, next) => {
     let resultList = [];
     let picList = [];
     let titleList = [];
@@ -31,4 +45,7 @@ const retrieveImage = (req, res, next) => {
     });   
 }
 
-module.exports = retrieveImage;
+module.exports = {
+    retrievePoster: retrievePoster,
+    getBackdrop: getBackdrop
+};

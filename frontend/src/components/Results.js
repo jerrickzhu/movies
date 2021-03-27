@@ -27,7 +27,8 @@ export default class Result extends React.Component {
         }
         const url = encodeURIComponent(this.state.searchItem);
         axios
-        .post(`http://localhost:4000/movieimage/${url}`,
+        .post(
+            `http://localhost:4000/movieimage/${url}`,
             {names: namesList},
             {cancelToken : source.token}
         ).then(response => {

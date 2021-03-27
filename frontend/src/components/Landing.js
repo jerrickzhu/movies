@@ -23,29 +23,27 @@ export default class Landing extends React.Component {
     search(event) {
         const url = encodeURIComponent(event.target.value);
         axios
-         .get(`http://localhost:4000/search/${url}`, { 
-            cancelToken: source.token
-        })
-         .then(response => {
-             if (response.data.num_results && response.data.num_results > 0) {
+        .get(`http://localhost:4000/search/${url}`, 
+            { cancelToken: source.token} 
+        ).then(response => {
+            if (response.data.num_results && response.data.num_results > 0) {
                 this.setState({
                     dataNYT: response.data,
                     foundData: true,
                     url: url,
                     searchItem: event.target.value
-               });
-             } else {
-                 this.setState({
-                     dataNYT: undefined,
-                     foundData: false,
-                     url: null,
-                     searchItem: null
-                 });
-             }
-         })
-         .catch(err => {
-             throw err;
-         })
+                });
+            } else {
+                this.setState({
+                    dataNYT: undefined,
+                    foundData: false,
+                    url: null,
+                    searchItem: null
+                });
+            }
+        }).catch(err => {
+            throw err;
+        })
     }
 
     handleKeyPress(e) {
