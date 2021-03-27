@@ -4,6 +4,8 @@ import line from "../images/line.svg";
 import axios from "axios";
 import { Redirect } from 'react-router-dom';
 
+let source;
+
 export default class Landing extends React.Component {
     constructor() {
         super()
@@ -15,12 +17,15 @@ export default class Landing extends React.Component {
             url: null,
             searchItem: null
         }
+        source = axios.CancelToken.source();
     }
 
     search(event) {
         const url = encodeURIComponent(event.target.value);
         axios
-         .get(`http://localhost:4000/search/${url}`)
+         .get(`http://localhost:4000/search/${url}`, { 
+            cancelToken: source.token
+        })
          .then(response => {
              if (response.data.num_results && response.data.num_results > 0) {
                 this.setState({
@@ -55,6 +60,9 @@ export default class Landing extends React.Component {
     }
 
     componentWillUnmount() {
+        if (source) {
+            source.cancel("Component unmounted");
+        }
         window.removeEventListener("keyup", e => {this.handleKeyPress(e)});
     }
 
@@ -64,12 +72,15 @@ export default class Landing extends React.Component {
                 <h1>WHAT IS</h1>
                 <h1>THE NEW YORK TIMES</h1>
                 <h1>SAYING ABOUT</h1>
-                <input className="search"
-                    type='search'
-                    placeholder=''
-                    autoFocus="autofocus"
-                />
-                <img src={line} alt="underline"/>
+                <div className='search-container'>
+                    <input className="search"
+                        type='search'
+                        placeholder=''
+                        autoFocus="autofocus"
+                    />
+                    <img className='line' src={line} alt="underline"/>
+                </div>
+                
 
                 {this.state.foundData ? <Redirect
                     to={{
