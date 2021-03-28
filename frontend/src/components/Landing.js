@@ -2,7 +2,7 @@ import React from 'react';
 import "../css/Landing.scss";
 import line from "../images/line.svg";
 import axios from "axios";
-import { Redirect } from 'react-router-dom';
+import { Redirect, NavLink } from 'react-router-dom';
 
 let source;
 
@@ -14,6 +14,7 @@ export default class Landing extends React.Component {
         this.state = {
             dataNYT: undefined,
             foundData: false,
+            loadPage: false,
             url: null,
             searchItem: null
         }
@@ -26,17 +27,20 @@ export default class Landing extends React.Component {
         .get(`http://localhost:4000/search/${url}`, 
             { cancelToken: source.token} 
         ).then(response => {
+            console.log(response.data);
             if (response.data.num_results && response.data.num_results > 0) {
                 this.setState({
                     dataNYT: response.data,
                     foundData: true,
+                    loadPage: true,
                     url: url,
                     searchItem: event.target.value
                 });
             } else {
                 this.setState({
                     dataNYT: undefined,
-                    foundData: false,
+                    foundData: undefined,
+                    loadPage: false,
                     url: null,
                     searchItem: null
                 });
@@ -65,22 +69,9 @@ export default class Landing extends React.Component {
     }
 
     render() {
-        return (
-            <div className="landing-text">
-                <h1>WHAT IS</h1>
-                <h1>THE NEW YORK TIMES</h1>
-                <h1>SAYING ABOUT</h1>
-                <div className='search-container'>
-                    <input className="search"
-                        type='search'
-                        placeholder=''
-                        autoFocus="autofocus"
-                    />
-                    <img className='line' src={line} alt="underline"/>
-                </div>
-                
-
-                {this.state.foundData ? <Redirect
+        if (this.state.foundData) {
+            return (
+                <Redirect
                     to={{
                         pathname: "/search/" + this.state.url,
                         state: {
@@ -89,9 +80,28 @@ export default class Landing extends React.Component {
                             from: this.props.location 
                         }
                     }}
-                    /> : <div></div>
-                } 
-            </div>
-        )
+                />
+            )
+        } else if (this.state.foundData === undefined) {
+            return (
+                <Redirect to='/notfound'/>
+            )
+        } else {
+            return (
+                <div className="landing-text">
+                    <h1>WHAT IS</h1>
+                    <h1>THE NEW YORK TIMES</h1>
+                    <h1>SAYING ABOUT</h1>
+                    <div className='search-container'>
+                        <input className="search"
+                            type='search'
+                            placeholder=''
+                            autoFocus="autofocus"
+                        />
+                        <img className='line' src={line} alt="underline"/>
+                    </div>
+                </div>
+            )
+        }
     }
 }

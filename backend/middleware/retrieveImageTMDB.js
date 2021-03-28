@@ -30,13 +30,11 @@ const retrievePoster = (req, res, next) => {
         resultList.push(getData(index));
     }
 
-
     Promise.all(resultList).then(results => {
         for (let index = 0; index < namesOfMovies.length; index++) {
             picList.push(results[index].data.results[0].poster_path);
             titleList.push(results[index].data.results[0].title);
             idList.push(results[index].data.results[0].id);
-            
         }
         res.locals.picList = picList;
         res.locals.titleList = titleList;

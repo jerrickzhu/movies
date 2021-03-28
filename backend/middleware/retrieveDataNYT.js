@@ -2,7 +2,6 @@ const axios = require("axios");
 const cheerio = require("cheerio");
 const API_KEY = "wqeDmddiHHUDTx7GN0m7cZLepTEnYuFI";
 
-
 const retrieveEntireMovieSearch = (req, res, next) => {
     const query = encodeURIComponent(req.params.searchquery);
     axios
@@ -12,8 +11,6 @@ const retrieveEntireMovieSearch = (req, res, next) => {
         next();
     })  
 }
-
-
 
 const getArticle = (req, res, next) => {
     const articleURL = req.body.articleData;
@@ -38,7 +35,6 @@ const getArticle = (req, res, next) => {
         throw err;
     });
 }
-
 
 module.exports = {
     retrieveEntireMovieSearch: retrieveEntireMovieSearch,

@@ -9,6 +9,4 @@ router.
      res.send(res.locals);
  })
 
-
-
 module.exports = router;

@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
-import DOMPurify from "dompurify";
 import "../css/Review.scss";
+import Parser from "html-react-parser";
 
 let source;
 
@@ -13,7 +13,8 @@ export default class Review extends React.Component {
             id: this.props.location.state.id,
             dataMovie: this.props.location.state.dataMovieNYT,
             article: null,
-            backdrop: null
+            backdrop: null,
+            requestCompleted: false
         };
         
         source = axios.CancelToken.source();
@@ -31,8 +32,10 @@ export default class Review extends React.Component {
         ).then(response => {
             this.setState({
                 article: response.data.articleHTML,
-                backdrop: response.data.backdrop
-            }); 
+                backdrop: response.data.backdrop,
+                requestCompleted: true
+            });
+            console.log(this.state.article)
         }).catch(err => {
             throw err;
         });
@@ -51,18 +54,43 @@ export default class Review extends React.Component {
 
 
     render() {
-        return (
-            <div className="page-container">
-                <img className='movie-backdrop' 
-                    src={`https://image.tmdb.org/t/p/original${this.state.backdrop}`} 
-                    alt='movie-pic'
-                />
-                <div className="article-container"
-                    dangerouslySetInnerHTML=
-                        {{__html: DOMPurify.sanitize(this.state.article)}}
-                >
+        if (this.state.requestCompleted) {
+            return (
+                <div className="page-container">
+                
+                {console.log(this.state.dataMovie)}
+                    <div className="backdrop-container">
+                        
+                        <img className='movie-backdrop' 
+                            src={`https://image.tmdb.org/t/p/original${this.state.backdrop}`} 
+                            alt='movie-pic'
+                        />
+
+                        <span className="movie-title">
+                            <h1 className="text">
+                                {this.state.dataMovie.display_title}
+                            </h1>
+                        </span>
+                        
+                    </div>
+                    <div className="big-container">
+                        
+                        <div className="article-container"
+                            // dangerouslySetInnerHTML=
+                            //     {{__html: DOMPurify.sanitize(this.state.article)}}
+                        >
+                            {Parser(this.state.article)}
+                        </div>
+
+                    </div>
+                    
                 </div>
-            </div>
-        )
+            ) 
+        } else {
+            return (
+                <h1>insert loading page later</h1>
+            )
+        }
+        
     }
 }
